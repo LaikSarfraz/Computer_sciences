@@ -1,0 +1,26 @@
+Ce projet a été réalisé dans le cadre du cours "Synthèse d'images", du professeur Jean Jacques Bourdin, à  Paris VIII. Voici son site  http://www.ai.univ-paris8.fr/~jj/Cours/SI/SI15.html
+
+Ce programme realise les choses suivantes :
+1/ Il applique l'algorithme de Floyrd-Steinberg sur une image de format BMP
+2/ Il peut ensuite compresser jusqu'a 7 fois la taille.
+
+Utilisation 
+$./a.out  Refuges.bmp
+1/ Ensuite, cliquez sur l'image, choisissez Floyd-Steinberg, un effet sera appliqué sur l'image
+2/ Vous pouvez maintenant compresser l'image en cliquant dessus, et choisir. le fichier sera compressé dans file.txt
+3/ Pour le décompresser, cliquez "decompresser" et tapez le nom du fichier, ( ici file.txt ) dans le terminal.
+
+
+
+
+
+
+-------------------------------------
+
+
+There is a project I realize for the course "Computer graphics" with my teacher Jean Jacques Bourdin. Here is his website http://www.ai.univ-paris8.fr/~jj/Cours/SI/SI15.html
+
+This program do the followings things :
+
+1/ He applying the algorithm of Floyd-Steinberg on a BMP picture.
+2/ He compress the BMP picture , he cans divide by 7 the size of the picture.
