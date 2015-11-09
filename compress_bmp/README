@@ -1,7 +1,7 @@
 Ce projet a été réalisé dans le cadre du cours "Synthèse d'images", du professeur Jean Jacques Bourdin, à  Paris VIII. Voici son site  http://www.ai.univ-paris8.fr/~jj/Cours/SI/SI15.html
 
 Ce programme realise les choses suivantes :
-1/ Il applique l'algorithme de Floyrd-Steinberg sur une image de format BMP
+1/ Il applique l'algorithme de Floyd-Steinberg sur une image de format BMP
 2/ Il peut ensuite compresser jusqu'a 7 fois la taille.
 
 Utilisation 
