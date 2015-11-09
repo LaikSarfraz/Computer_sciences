@@ -1,0 +1,7 @@
+On peut coder 6 couleurs sur 3 bits car avec 3 bits j'ai 8 couleurs dispo
+000 = noir
+001 = blanc
+010 = rouge
+011 = vert
+100 = bleu
+101 = gris
