@@ -1,0 +1,276 @@
+\documentclass{article}
+
+\usepackage{url}
+\usepackage[T1]{fontenc}        % pour « »
+\usepackage[utf8]{inputenc}     % entrée en utf-8
+\usepackage[dvips,dvipdf]{graphicx}
+\usepackage{color}
+\usepackage[french]{babel}
+\usepackage{a4}
+
+% Pour les listings (oct 2009)
+\usepackage{listings}
+\lstset{% general command to set parameter(s)
+% Ca ne me plait pas en small
+%    basicstyle=\small,          % print whole listing small
+    keywordstyle=\texttt,
+    identifierstyle=\texttt,
+    commentstyle=\texttt,
+    stringstyle=\texttt,
+    showstringspaces=false,     % no special string spaces
+    extendedchars=true,
+    numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+\renewcommand{\ttdefault}{cmtt}
+
+\setlength{\parindent}{0cm}
+
+\newcommand{\xxx}{\vspace*}
+
+\newcounter{questionnumero}
+\stepcounter{questionnumero}
+\newcommand{\Question}{{\vspace{2mm}\hrule\vspace{2mm} \bf Question \arabic{questionnumero}~:~}\stepcounter{questionnumero}}
+
+\title{Cours de compilation\\ TD numéro 2}
+\date{8 octobre 2015}
+\author{Jean Méhat}
+
+\begin{document}
+
+\maketitle
+
+\section*{Commentaires généraux}
+
+Puisque les résultats des TPs sont pris en compte dans la notation, il
+est nécessaire d'avoir assimilé le contenu du cours {\em avant} la
+séance de TP. Je trouve cela inquiétant d'avoir vu des étudiants
+étudier le chapitre 1 du support pendant le TP, visiblement pour la
+première fois.
+
+Pour que je puisse tester votre code, il était nécessaire de m'envoyer
+les fichiers de code éventuellement en les regroupant dans une
+archive.  Il y a plus de 30 étudiants dans le cours ; ce n'est pas
+envisageable pour moi d'extraire vos réponses d'un fichier de texte ou
+d'un PDF avec des copier-coller pour pouvoir les compiler.  Pour la
+même raison, il était nécessaire de joindre le fichier en C qui
+accompagnait le fichier en assembleur.
+
+Beaucoup d'entre vous ont utilisé du code avec des constantes pour
+tester vos fonctions. Ce n'est pas raisonnable car cela limite
+considérablement les tests effectués ; par exemple, plusieurs réponses
+pour la fonction qui calcule le minimum renvoyaient systématiquement
+le premier argument et n'avaient visiblement été testées qu'avec le
+minimum comme premier argument. Il vaut bien mieux utiliser les
+arguments de la fonction main (argc et argv) ce qui permet d'effectuer
+plusieurs tests sans avoir à recompiler le code, surtout si on est un
+peu familier avec la ligne de commande ({\em indication subliminale :
+  familiariez-vous avec la ligne de commande}).
+
+
+
+\Question Écrire en assembleur une fonction {\tt min2} qui reçoit deux
+arguments et renvoie le plus petit des deux.
+
+{\em Commentaire :}
+à peu près toutes les réponses ont utilisé une méthode qui me semble peu
+naturelle {\em (placer les arguments dans les registres, si c'est le bon
+  argument qui est dans \%eax, effectuer un return, sinon les échanger
+  et effectuer un return)} ; moi j'ai plutôt envie de faire {\em placer
+  les arguments dans les registres, si ce n'est pas le bon qui est dans
+  \%eax, les échanger, faire le return}.
+Ça donne le code assembleur suivant :
+\lstinputlisting{min2.s}
+Le code C pour le faire tourner :
+\lstinputlisting{min2-d.c}
+Des commandes pour le tester :
+\begin{verbatim}
+$ gcc -Wall -m32 -g min2-d.c min2.s
+$ a.out 1 2
+min2(1, 2) = 1
+$ a.out 2 1
+min2(2, 1) = 1
+\end{verbatim}
+
+On peut tester un peu plus sérieusement avec par exemple
+\begin{verbatim}
+$ for i in $(seq 1 5) ; do for j in $(seq 1 5) ; do a.out $i $j; done ; done
+\end{verbatim}
+
+
+\Question
+Traduire en assembleur la fonction {\tt indexa} suivante, qui renvoie
+l'adresse du premier a dans une chaîne (ou 0 s'il n'y est pas).
+\begin{verbatim}
+char *
+indexa(char string[]){
+        int i;
+        
+        for(i = 0; string[i] != 0; i++)
+                if (string[i] == 'a')
+                        return & string[i];
+        return 0;
+}
+\end{verbatim}
+ou bien :
+\begin{verbatim}
+char * indexa(char * p){
+        for(; *p; p++)
+                if (*p == 'a')
+                        return p
+        return 0;
+}
+\end{verbatim}
+
+{\em Commentaire :} Le code assembleur à écrire n'était pas trop
+difficle. Certains ont cependant commis une erreur grossière de
+comparer l'octet avec \$'0' pour détecter la fin de chaîne. Certains
+ont renvoyé l'index au lieu de l'adresse. Plusieurs n'ont pas traité
+correctement le cas où la chaine était vide (mais les déficiences de
+leurs tests ne semblent pas avoir permis d'identifier le problème).
+\lstinputlisting{indexa.s} Le code de test était un peu plus délicat :
+on ne pouvait pas se contenter d'imprimer l'adresse renvoyée par
+indexa, sans s'assurer que cette adresse était correcte. Mon code
+utilise la fonction de bibliothèque strchr ; si vous ne connaissiez
+pas cette fonction, il était possible d'utiliser le code de l'énoncé.
+\lstinputlisting{indexa-d.c} Un test possible (a dans toutes les
+positions d'une chaine de 5 caractères, en vérifiant qu'il rend bien
+le premier a quand il y en a plusieurs).
+\begin{verbatim}
+$  gcc -Wall -g -m32 indexa-d.c indexa.s
+$ a.out xxx abcdea bacdea bcadea bcdaea bcdaea bcdeaa
+Dans la chaine xxx: on n'a pas trouve 'a'
+Dans la chaine abcdea: on trouve 'a' en 0
+Dans la chaine bacdea: on trouve 'a' en 1
+Dans la chaine bcadea: on trouve 'a' en 2
+Dans la chaine bcdaea: on trouve 'a' en 3
+Dans la chaine bcdaea: on trouve 'a' en 3
+Dans la chaine bcdeaa: on trouve 'a' en 4
+\end{verbatim}
+
+\Question
+Écrire une fonction {\tt rindexa} qui renvoie l'adresse du
+{\em dernier} caractère 'a' dans la chaîne.
+
+{\em Corrigé :} Je trouve inquiétant que beaucoup d'entre vous aient
+répondu correctement à la question précédente mais pas à celle-ci dont
+le niveau de difficulté me semble équivalent. Je ne montre que
+le code assembleur (le code de test est à peu près le même que dans
+la question précédente en utilisant cette fois la fonction strrchr ; on
+devrait le trouver dans les fichiers de l'archive).
+\lstinputlisting{rindexa.s}
+
+\Question
+Traduire la fonction suivante du C vers l'assembleur
+\begin{verbatim}
+int
+fact(int n){
+        int r;
+
+        for(r = 1; n > 1; n--)
+                r *= n;
+        return r;
+}
+\end{verbatim}
+
+{\em Corrigé :} beaucoup de réponses correctes ; ce n'est pas très étonnant
+puisqu'il suffisant de retaper du code vu en cours. Il y a de nombreuses
+autres façons de faire ; par exemple :
+\lstinputlisting{fact.s}
+Le code C :
+\lstinputlisting{fact-d.c}
+On peut tester avec :
+\begin{verbatim}
+$ gcc -g -m32 fact-d.c fact.s
+$ a.out 1 2 3 4 5 6 7
+fact(1) = 1
+fact(2) = 2
+fact(3) = 6
+fact(4) = 24
+fact(5) = 120
+fact(6) = 720
+fact(7) = 5040
+\end{verbatim}
+Si on appelle la fonction avec un argument négatif, la boucle
+balaie presque tous les entiers (en passant par 0) en quelques
+secondes :
+\begin{verbatim}
+$ a.out -1
+fact(-1) = 0
+\end{verbatim}
+
+\Question
+Traduire la fonction suivante du C vers l'assembleur
+\begin{verbatim}
+int
+fib(int n){
+        if (n < 2)
+                return n;
+        return fib(n - 1) + fib(n - 2);
+}
+\end{verbatim}
+
+{\em Corrigé :} Une réponse possible :
+\lstinputlisting{fib.s}
+Le fichier driver en C est presque le même que celui pour tester la
+fonction factorielle ; vous pouvez le trouver dans l'archive. On
+peut tester par exemple avec
+\begin{verbatim}
+$ gcc -g -m32 fib.s fib-d.c
+$ a.out $(seq 0 12)
+fib(0) = 0
+fib(1) = 1
+fib(2) = 1
+fib(3) = 2
+fib(4) = 3
+fib(5) = 5
+fib(6) = 8
+fib(7) = 13
+fib(8) = 21
+fib(9) = 34
+fib(10) = 55
+fib(11) = 89
+fib(12) = 144
+\end{verbatim}
+
+{\em Commentaire :} Le point crucial ici est de sauver la valeur de
+fib(n-1) dans la pile pendant le calcul de fib(n-2).  J'ai compté
+comme fausses les réponses qui calculaient la valeur de la fonction de
+Fibonacci sans utiliser la récursion.
+
+\Question
+Traduire l'assembleur suivant en C
+\begin{verbatim}
+        .text
+        .globl  heron
+heron:
+        pushl   %ebx
+        movl    8(%esp),%eax
+        movl    12(%esp),%ebx
+        movl    16(%esp),%ecx
+        movl    %eax,%edx
+        addl    %ebx,%eax
+        addl    %ecx,%eax
+        sarl    $1,%eax
+        subl    %eax,%ebx
+        subl    %eax,%ecx
+        subl    %eax,%edx
+        imull   %ebx,%eax
+        imull   %ecx,%eax
+        imull   %edx,%eax
+        negl    %eax
+        popl    %ebx
+        ret
+\end{verbatim}
+
+{\em Commentaire :} pas une seule réponse correcte à cette question !
+Je la met de coté pour une autre occasion.
+
+\hrule
+\section*{Bonus}
+
+Les questions bonus ne sont bien sur à traiter qu'après avoir
+répondu aux questions principales ; j'ai eu quelques réponses
+peut-être correctes pour la fonction qui calcule le médian
+mais je ne les ai pas prises en compte parce qu'il
+manquait des réponses aux questions principales.
+
+\end{document}

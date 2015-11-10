@@ -1,0 +1,30 @@
+http://developer.android.com/guide/components/intents-filters.html  LES INTENT VARIENT SELON TON UTILISATION ( web , photo)
+Definition du site developper.android:
+An Intent is a messaging object you can use to request an action from another
+ app component. Although intents facilitate communication between
+ components in several ways, there are three fundamental use-cases:
+1/start an activity
+2/To start a service:
+3/broadcast:
+
+
+L'intent filter est tjr envoyé à la cible, meme si il y a plusieurs intent
+Chaque intent est défini par <intent-filter>
+3 éléments pour l'intent filter quelles types d'actions :
+<action>
+<data>
+<category>
+
+Pour que d'autres appli puissent communiquer avec ton intent, 
+il faut le définir dans la déclaration <activity android:name = "shareActivity">
+<intent-filter> 
+<action android:name ="android.intent.action.SEND"/>
+
+intent je veux faire ca
+intent filter = ce que je suis capable de faire
+
+la ligne suivante
+<data android:scheme = "sms"/> signifie que je suis capable d'envoyer des sms, par contre si elle n'envoie rien , crash
+
+La ya3lamu al mualimu an notes sadaralouuna aussi tot 
+du coup les cours seront donnés plus rapidement ? 

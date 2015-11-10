@@ -1,0 +1,1105 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"><title> Cours Algorithmique Avancée, 2015 J-J Bourdin</title>
+<!----<link rel="stylesheet" href="./global.css">---->
+<style type="text/css" media="screen">@import"proj.css";</style>
+</head>
+<!----
+<BODY leftmargin="5" topmargin="10" marginwidth="10" marginheight="10"
+background="images/fond_home.gif" bgColor="#FFFFFF">
+BON BON BON
+---->
+<body alink="#ff0000" link="#0000ff" text="#000000" vlink="#ff0000" bgcolor="#ffffff"><a name="HAUT"></a>
+
+<p>
+<font face="verdana">
+</font></p><hr size="3" noshade="noshade" width="100%"><font face="verdana">
+<p>
+<font size="6"> <b>
+<!---
+<a href=.><img 
+                align=right
+                border=0
+                src=../../bourdin.gif></a>
+--->
+Jean-Jacques BOURDIN
+</b></font>
+</p><p>
+</p><dl>
+<dt> <b> E-mail </b> : <br>
+<font size="SMALL">
+ Jean-Jacques.Bourdin NOSPAM @ ai.univ-paris8.fr <br>(enlever le NO Spam)
+</font>
+</dt></dl>
+<p>
+</p><hr size="3" noshade="noshade" width="100%">
+<p>
+
+</p><p>
+</p><h1>
+<center>
+Algorithmique Avancée
+</center>
+</h1>
+<p>
+</p><hr size="3" noshade="noshade" width="80%">
+<p>
+</p><h2>
+<p>
+</p><center>
+Automne 2015<br>
+Fall 2015<br>
+</center>
+<p>
+</p></h2><br>
+<center>
+Ce cours fait partie de l'U.E. "Informatique V" de la troisième année
+de la Licence Informatique.<br>
+This course takes place on the third year of Computer Science curriculum. <br>
+<br></center>
+
+
+
+<!---
+<P>Les deux prochains cours auront lieu le mardi, donc mardi 29/4 et mardi 6/5, à 15h en salle B103.
+</P><BR>
+
+<P><FONT COLOR=RED>Présentation de vos travaux</P>
+</FONT>
+<P>Les présentations sont prévues le mardi 29 mai 2012 entre 9h et 14h, la salle sera précisée ultérieurement.</P>
+--->
+
+<!---<P><FONT COLOR=RED>Rattrapage</FONT></P>
+Il est possible, pour les projets qui n'ont pas été satisfaisants, de
+faire des améliorations et des ajouts. Dans ce cas il faut voir les
+enseignants pour avoir un accord sur le travail à fournir en plus.<BR>
+Le délai accordé sur ces rattrapges est fixé au 15 juillet à 12h.
+<BR>
+--->
+<ol>
+<li><a href="#presen">Présentation</a>
+</li><li><a href="#COMP">Constantes et complexité</a>
+  <ol><li>Calculs de complexité
+      </li><li>Mesures de complexité
+      </li><li>Constante
+  </li></ol>
+</li><li><a href="#DROITE">De la Droite Discrète</a>
+  <ol><li>Algorithme trivial
+      </li><li>DDA et accélération
+      </li><li>Mots de trace
+      </li><li>Algorithme rapide
+  </li></ol>
+</li><li><a href="#graf">Graphes</a>
+  <ol><li>Codage
+	  </li><li>Algorithmes
+  </li></ol>
+</li><li><a href="#trait">Compression</a>
+  <ol><li>Bases
+      </li><li>Compression sans perte
+      </li><li>Compression avec perte
+      </li><li>Compression d'images
+  </li></ol>
+<!---
+<LI><A HREF="#3d">Modélisation, Illumination, Rendus</A>
+  <OL><LI>2D/3D
+      <LI>Modélisation
+      <LI>Illumination
+      <LI>Lumière
+      <LI>Rendus, quelques effets
+  </OL>
+<!----<LI><A HREF="#npr">Non Photorealistic Rendering</A>---->
+
+<!----<LI><A HREF="#result">Résultats</A>---->
+
+</li><li><a href="#projets">Projets</a>
+</li></ol>
+
+<p>
+</p><hr size="3" noshade="noshade" width="100%">
+<p>
+</p><ol>
+<li><h3><a name="presen">Presentation</a></h3>
+<p>It is possible to this course to be taught in english, would you mind?</p>
+ <ol>
+   <li>Bases nécessaires (prérequis)
+   </li><li>Objectifs
+   </li><li>Validation
+ </li></ol><p>
+
+</p></li><li><h3><a name="COMP">Complexité</a></h3>
+
+Exemple donné le 24/09&nbsp;:
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>paire fiblog (int n) {
+  paire mi, res;
+  ullint fi;
+  int i;
+
+  if (n &lt; 2) {
+	res.fun = (ullint) 1;
+	res.fdeux = (ullint) 1;
+	return res;
+  }
+  i = n &gt;&gt; 1;
+  mi = fiblog(i);
+  if (n &amp; 0x01) {
+	res.fdeux = mi.fun * mi.fun + mi.fdeux * mi.fdeux;
+	res.fun = (mi.fun + mi.fdeux + mi.fdeux) * mi.fun;
+	return res;
+  }
+  res.fun = mi.fun * mi.fun + mi.fdeux * mi.fdeux;
+  res.fdeux = (mi.fun + mi.fun - mi.fdeux) * mi.fdeux;
+  return res;
+}
+ullint fibo (int n) {
+  paire res;
+  if (n &gt;= 0 &amp;&amp; n &lt; 92) {
+	res = fiblog (n);
+	return res.fun;
+  }
+  return (ullint) 0;
+}
+</pre></td></tr></tbody></table>
+
+<!---
+
+<LI><H3><A NAME="images"> Vision, Images et Couleurs</A></H3>
+  <OL>
+   <LI>Vision et CIE
+     <UL>
+     <LI>Vue
+     <LI>Lois de Grasmann
+     <LI>Expérimantation, CIE et constatations
+     </UL>
+   <LI>Modèle de l'image numérique
+   <LI>La couleur
+     <UL>
+     <LI>Définition
+     <LI>Représentation
+     <LI>Quelques modes de représentation
+     <LI>Conversions
+      <UL>
+      <LI>rgb vers cmy<BR>
+		(c,m,y) = (1,1,1) - (r,g,b)
+      <LI>cmy vers rgb<BR>
+     <LI>De RGB vers HSV<BR>
+
+Voici une fonction qui passe une couleur de la forme d'un triplet rgb
+	   en un triplet hls. Il vous reste à faire la réciproque. 
+Vous remarquerez que dans cette version "officielle" le "delta" fait
+  entrer un peu de la saturation dans le calcul de la teinte. Nous
+  verrons pourquoi ce système est donc, moins bon qu'un autre.
+
+<TABLE BORDER=1><TD><PRE>
+/* qui inclut tous les transferts et conversions de couleurs */
+/* jj 2011 base sur Foley, Van Dam, Feiner, Hugues           */
+
+#define UNDEFINED -1.0
+
+/* Les deux fonctions qui prennent le max et le min de trois valeurs
+de format byte sont à votre discrétion */ 
+
+void rgbtohsv (GLubyte r, GLubyte g, GLubyte b, short *h, GLubyte *s, GLubyte *v) {
+  /* valeurs toutes entre 0 et 255 sauf h entre 0 et 360 */
+  float mx, md, mi, delta, tm;
+  short max, min, c;
+  float h1;
+
+  max = max3b(r, g, b);
+  min = min3b(r, g, b);
+  c = max - min;
+  if (c) {
+	if (max == r) {
+	  h1 = (g - b) / (float) c;
+	}
+	else if (max == g) {
+	  h1 = 2.0 + (b - r)  / (float) c;
+	}
+	else {
+	  h1 = 4.0 + (r - g) / (float) c;
+	}
+	if (h1 < 0.0)
+	  h1 += 6.0;
+	h1 *= 60.0;
+	*h = (short) h1;
+	*v = (GLubyte) max;
+	*s = (GLubyte) ((255.0 * c) / max);
+	/*
+  printf("r%d g%d b%d max%d min%d c%d s%d v%d h%d\n", r, g, b, max, min, c, *s, *v, *h);
+	*/
+  }
+  else {
+	*s = 0;
+	*v = max;
+	*h = UNDEFINED;
+  }
+}
+/* h, hue, est donné entre 0 et 360 */
+</PRE>
+</TABLE>
+<!---
+      <LI>hsv vers rgb<BR>
+<TABLE BORDER=1><TD><PRE>
+// Hue in degrees
+/* fortement inspire de
+http://www.alvyray.com/Papers/hsv2rgb.htm
+*/
+void hsvtorgb (short h, GLubyte s, GLubyte v, GLubyte * r, GLubyte *g, GLubyte *b) {
+  int i;
+  float hf, sf, vf, ff, mf, nf, rf, gf, bf;
+
+  hf = h / 60.0;
+  sf = s / 255.0;
+  vf = v / 255.0;
+  if (h == UNDEFINED) {
+	*r = v;
+	*g = v;
+	*b = v;
+	return;
+  }
+  i  = (int) hf;
+  ff = hf - i;
+  if ( ! (i & 0x01))
+	ff = 1 - ff;
+  mf = vf * (1.0 - sf);
+  nf = vf * (1.0 - sf * ff);
+  switch (i) {
+  case 0:
+	rf = vf;
+	gf = nf;
+	bf = mf;
+	break;
+  case 1:
+	rf = nf;
+	gf = vf;
+	bf = mf;
+	break;
+  case 2:
+	rf = mf;
+	gf = vf;
+	bf = nf;
+	break;
+  case 3:
+	rf = mf;
+	gf = nf;
+	bf = vf;
+	break;
+  case 4:
+	rf = nf;
+	gf = mf;
+	bf = vf;
+	break;
+  default:
+	rf = vf;
+	gf = mf;
+	bf = nf;
+	break;
+  }
+  *r = (GLubyte) (255.0 * rf);
+  *g = (GLubyte) (255.0 * gf);
+  *b = (GLubyte) (255.0 * bf);
+}
+int verifbyte(GLubyte r,GLubyte g,GLubyte b,GLubyte rr,GLubyte gg,GLubyte bb, short h, GLubyte s, GLubyte v, int precision) {
+  float ep = 0.00001;
+  int val;
+
+  val  = (r - rr) * (r - rr);
+  val += (g - gg) * (g - gg);
+  val += (b - bb) * (b - bb);
+  /* Ici la precision est le carre de la distance */
+  if (val > precision) {
+	/*
+	printf("(%d, %d, %d) != ",r,g,b);
+	printf("(%d, %d, %d) ",rr,gg,bb);
+	printf("\t(h %d, s %d, v %d) \n",h, s, v);
+	*/
+	return 1;
+  }
+  return 0;
+}
+
+main () {
+  GLubyte r, g, b, l, s, nr, ng, nb;
+  short h;
+  int nberr, prec;
+
+  for (prec = 1; prec < 60; prec += 5) {
+	nberr = 0;
+	printf("Voici les valeurs pour lesquelles l'approximation est peu fiable :\n");
+	for (r = 0; r < 255; r++) {
+	  for (g = 0; g < 255; g++) {
+		for (b = 0; b < 255; b++) {
+		  rgbtohsv(r,g,b,&h,&l,&s);
+		  hsvtorgb(h,l,s,&nr,&ng, &nb);
+		  nberr += verifbyte(r,g,b,nr,ng,nb,h,l,s, prec);
+		}
+	  }
+	}
+	printf("precision %d Erreurs : %d\n", prec, nberr);
+  }
+}
+
+/*
+mu.ai.univ-paris8.fr: a.out
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 1 Erreurs : 4593134
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 6 Erreurs : 1194506
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 11 Erreurs : 124080
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 16 Erreurs : 1047
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 21 Erreurs : 209
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 26 Erreurs : 0
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 31 Erreurs : 0
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+precision 36 Erreurs : 0
+Voici les valeurs pour lesquelles l'approximation est peu fiable :
+*/
+</PRE>
+</TABLE>
+
+<P></P>
+Vous trouverez ci-dessous des fichiers permettant de lire une image
+		bmp et de l'afficher, et, ensuite, des fonctions pour passer
+		de rgb en hls, à vous de faire l'inverse, puis à vous de vous
+		en servir pour "ajouter de la lumière" à tous les pixels d'une
+		image.<P>
+Attention, il faut peut-être retravailler le makefile ou une fonction pour que tout aille bien.
+   <UL>
+    <LI><A HREF=./Sources13/makefile> le <tt>makefile</tt> pour fonctionner au Bocal
+	  </A>.
+    <LI><A HREF=./Sources13/bmp.h> le <tt> header</tt></A>.
+    <LI><A HREF=./Sources13/main.c> le fichier <tt>main.c</tt></A>.
+    <LI><A HREF=./Sources13/bmp.c> le fichier <tt> bmp.c</tt></A>.
+    <LI><A HREF=./Sources13/modif.c> le fichier <tt> modif.c</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/ciel.bmp> un fichier d'image de <tt> ciel</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/dcp.bmp> un fichier <tt> image</tt></A>.<BR>
+Quelques images de plus&nbsp;:<BR><P></P>
+<!--    <LI><A HREF=../ImagesBMP/
+> un fichier d'image de <tt> 
+</tt></A>.--->
+<!---
+    <LI><A HREF=./2010/ImagesBMP/Cordiliere1.bmp> un fichier d'image de <tt> montagne</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/Lama.bmp> une image de <tt> lama</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/Soleil_couchant.bmp> un fichier d'image de <tt> Soleil couchant sur la mer</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/Cordee.bmp> un fichier d'image de <tt> cordée</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/Cordiliere2.bmp> un fichier d'image de <tt> montagne (encore)</tt></A>.
+    <LI><A HREF=./2010/ImagesBMP/Refuges.bmp> un fichier d'image de <tt> Neige avec tentes</tt></A>.
+   </UL><P>
+   </UL><P>
+   </UL><P>
+</OL>
+<LI><H3><A NAME="trait">Traitement des images</A></H3>
+  <OL>
+  <LI>Programmation minimale<BR>
+Il faut pouvoir lire, écrire, modifier, une image. Voici les fichiers
+permettant de le faire pour un fichier <tt>bmp</tt>. Ce programme doit
+	être maintenant facile à utiliser, non&nbsp;?
+   <UL>
+   </UL><P>
+Pour toute la suite d'exercices, vous pouvez poser des questions à
+   votre enseignant qui tentera d'y répondre. Vous devez maintenant&nbsp;:<BR>
+   <OL>
+    <LI>Faire tourner les programmes ci-dessus.
+    <LI>Rajouter de la "Light" à tous les pixels de l'image.<BR>
+Pour cela on passe la couleur de chaque pixel en hls (ou hsv, c'est mieux). Puis on rajoute
+de la lumière (par exemple l = l + (1.0 - l) / 2.0), puis on repasse
+en rgb, puis on réaffiche.
+    <LI>Faire les transformation pour lire et écrire un fichier
+	<tt>rgb</tt> ou 	<tt>sgi</tt>. Dans lequel on ne comptera pas
+	la compression 	<tt>rle</tt>.
+    <LI>Augmenter le contraste grâce aux histogrammes (et cumulés).
+</OL>
+  <LI>Dithering
+<OL>
+    <LI>Faire une image en dithering.<BR>
+Dithering : doubler les deux dimensions d'une image en remplaçant un
+	  pixel de valeur v par quatre pixels dont les valeurs sont 0
+	  (noir) ou 1 (blanc). Ceci permet de fabriquer 0 niveaux de
+	  gris&nbsp;: 0 pixel allumé, 1 pixel allumé, 2 pixels allumés, 3
+	  pixels allumés et les 4 pixels allumés.
+    <LI>Ajouter la diffusion d'erreur.<BR> On pourra regarder la
+    méthode de Floyd Steinberg.
+    <LI>Faire du noir et blanc par petites lignes. C'est-à-dire
+    remplacer un pixel "à afficher" par une petite ligne (par exemple
+    trois pixels vers le bas...) de longueur l et d'orientation alpha
+    (angle par rapport à l'horizontale). Attention, si on ne fait pas
+    de gestion d'erreur, cette méthode fonce beaucoup l'image.
+<!---    <LI>Faire du screening.
+    <LI>Par fenêtre de 2x2 ou 3x3 ou 4x4 pixels, déplacer les pixels
+    dans la fenêtre. Par exemple on placera en bas à gauche le plus
+    lumineux (v le plus grand en hsv) puis juste au-dessus le second
+    plus lumineux, puis, et ainsi de suite jusqu'au moin slumineux qui
+    sera en haut à droite.
+    <LI>Idem mais avec d'autres dispositions.
+    <LI>Presque la même chose, mais cette fois, ce ne sont que les
+    valeurs v des nxn pixels qui sont déplacées, par les h et les
+    s. Avec différentes formes de classement, on obtient des effets différents.
+--->
+<!----<P><B>Pour l'instant pas de résultat publiable<BR>
+Allez-vous laisser passer le bonus-point&nbsp;?</B></P>
+  <LI>Anti-Aliasing
+</OL>
+<!---
+<LI><H3><A NAME="3d">Modélisation, Illumination, Rendus</A></H3>
+<P>Ce cours a été basé sur des vidéoprojections, difficile à retranscrire ici.</P>
+
+--->
+  </li><li><h3><a name="DROITE">De la Droite Discrète<br></a></h3>
+   <ol>
+   <li>Définition<br>
+   </li><li>De l'évidence à la référence<br>
+<table border="1"><tbody><tr><td><pre>void droite (int x0, int y0, int x1, int y1) {
+  int x, y;
+  float yf;
+  
+  for (x = x0; x &lt;= x1; x++) {
+     yf = (float) (x - x0) * (y1 - y0);
+     yf /= (x1 - x0);
+     yf += y0;
+     y = (int) (yf + 0.5);
+     affiche(x,y);
+  }
+}
+</pre></td></tr></tbody></table>
+Est à la fois simple et peut efficace. Jack Bresenham a présenté un
+travail fort différent en 1962 (publié en 1965)&nbsp;:
+<table border="1"><tbody><tr><td><pre>void droite_br (int u, int v) {
+   int x, y, delta, incD, incH;
+
+   incH   = v &lt;&lt; 1;
+   delta  = incH - u;
+   incD   = delta - u;
+   for (x = 0, y = 0; x &lt;= u; x++) {
+      affiche(x, y);
+      if (delta &gt; 0) {
+         y++;
+         delta += incD;
+      }
+      else {
+         delta += incH;
+      }
+   }
+}
+</pre></td></tr></tbody></table>
+
+   </li><li>Améliorer la référence<br>
+<ol>
+  <li>Angel et Morrison (CG&amp;A 1991) via le pgcd<br>
+<ul><li>Calculer g le pgcd de u et v.
+	</li><li>Calculer ug= u/v et vg= v/g
+	</li><li>Calculer la droite de pente (ug, vg).
+	</li><li>Pour l'affichage, réitérer g fois le chemin trouvé.
+</li></ul>
+  </li><li>Rokne, Wyvill et Wu (CG&amp;A 1993) via le pas de deux<br> Vous
+  trouverez cet article dans le catalogue de la bibliothèque par
+  exemple <a href="http://accesdistant.bu.univ-paris8.fr:2166/results.cfm?h=1&amp;cfid=550117368&amp;cftoken=43003115"> ICI </a>.
+  </li><li>Graham et Iyengar (CG&amp;A 1994) via le pas de trois<br> Vous le
+  trouverez de la même manière, par exemple
+  <a href="http://accesdistant.bu.univ-paris8.fr:2166/citation.cfm?id=170791.170877&amp;coll=DL&amp;dl=ACM&amp;CFID=550117368&amp;CFTOKEN=43003115">
+  ICI </a>.
+
+  </li><li>Gill (CG&amp;A 1994) via le pas de 4, ou 5 ou N<br>
+  </li><li>B. et B. (CG&amp;A 2000) via le pas <a href="http://www.ai.univ-paris8.fr/%7Ejj/Rech/SI/cga.pdf">auto-adaptatif</a>.
+</li></ol>
+<b>Exercice&nbsp;: tester les algorithmes précédents en temps et qualifier le gain effectif.</b>
+   </li><li>Chercher ailleurs<br>
+
+<ol>
+   <li>"Sous les pavés"<br>
+   </li><li>Euclide et applications<br>
+	 <ol>
+	   <li> Dulucq-Bourdin<p>
+     </p></li><li>Berstel<p>
+       Une fois connue la décomposition de la fraction <tt>dy/dx</tt>
+	   en série de fractions continues </p><p>
+	 <tt>dy/dx = [u0; u1, u2, u3, ..., un]</tt></p><p>
+	   l'algorithme suivant peut être utilisé.
+       </p><pre>       w(0) = 0
+       w(1) = 0^(u1-1) . 1
+       w(i) = w(i-1)^ui . w(i-2)  (i impair)
+       w(i) = w(i-2) . w(i-1)^ui  (i pair)
+       </pre>
+       . est l'opérateur de concaténation tandis que "w^n" est la
+	   duplication n fois du mot w.
+
+	   Exemple d'utilisation : soit la droite de pente 3/11. La
+	   décomposition est [0; 3, 1, 2]. On a&nbsp;:
+       <pre>	   w(0) = 0
+	   w(1) = 0 0 1
+	   w(2) = 0 0 0 1
+	   w(3) = 0 0 0 1 0 0 0 1 0 0 1
+	   </pre>
+     </li><li>Green and Pitteway
+       <pre>       droite (dx, dy) {
+          dx -= dy;
+          s = "0";
+          t = "1";
+          while (dx != dy) {
+             if (dx &gt; dy) {
+                dx -= dy;
+                t = s . t;
+             }
+             else {
+                dy -= dx;
+                s = s . t;
+             }
+          }
+          return ( s . t ) ^dx;
+        }
+        </pre>
+       <pre>       droitebest (dx, dy) {
+          dx -= dy;
+          s = "0";
+          t = "1";
+          while (dx != dy) {
+             if (dx &gt; dy) {
+                dx -= dy;
+                t = s . t ^(-1);
+             }
+             else {
+                dy -= dx;
+                s = t . s ^(-1);
+             }
+          }
+          return ( s . t ^ (-1) ) ^dx;
+        }
+        </pre>
+     </li><li>Dulucq et Bourdin
+</li></ol>
+     </li><li>Plages (Spans)
+     </li><li>Récapitulation et algorithme rapide<br>
+De tout cela découle un algorithme particulièrement rapide (près de 20
+	   fois plus rapide que celui de Bresenham en 1965), qui est
+	   présenté dans <a href="http://www.ai.univ-paris8.fr/%7Ejj/Rech/SI/eg99.pdf"> cet article à
+		 Eurographics, en 1999.</a>
+   </li></ol>
+<!---
+  <LI>Autres courbes<BR>
+   <OL>
+   <LI>Le cercle discret<BR>
+    <LI>L'ellipse discrète<BR>
+    <LI>Les courbes quadratiques quelconques<BR>
+  <LI>
+   </OL>
+  <LI>Remplissages et Coloriages<BR>
+   <OL>
+    <LI>Diffusion<BR>
+     <OL>
+     <LI>Alvy Ray Smith
+     <LI>Fishkin et Barsky
+     <LI>Implémentations
+     </OL>
+    <LI>Gestion de coutours
+     <OL>
+     <LI>YX
+     <LI>Hégron
+     </OL>
+    <LI>Dégradés
+     <OL>
+     <LI>Méthodes classiques (partition, Gouraud, pochoirs)
+     <LI>DDA
+       <OL>
+       <LI>Linéaires<BR>
+       <LI>Concentriques<BR>
+       <LI>Ellipsoïdaux<BR>
+       <LI>Angulaires<BR>
+       <LI>Quadratiques<BR>
+       </OL>
+     <LI>Little and Heuft et ses améliorations
+     </OL>
+   </OL>
+--->
+
+</li></ol>
+
+<p>
+
+</p></li><li><h3><a name="graf">Graphes</a></h3>
+<ol>
+  <li>Exemple trivial
+Vous pouvez vous souvenir de cette construction de graphe&nbsp;:
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>#include<stdio.h>
+#include<stdlib.h>
+
+#define MAX 5
+
+struct noeud {
+  int n;
+  int h;
+  float l;
+  float surf;
+  struct noeud * suc [3];
+} ;
+typedef struct noeud noeud;
+typedef struct noeud * tas;
+tas creenoeud (int nb) {
+  tas t;
+  t = (tas) malloc (sizeof(noeud));
+  t-&gt;n = nb;
+  t-&gt;h = nb + 4;
+  t-&gt;l = 11.0 - (float) ((t-&gt;h) &lt;&lt; 1);
+  if (t-&gt;l &lt; 0)
+	t-&gt;l *= -1.0;
+  t-&gt;suc[0] = (tas) 0;
+  t-&gt;suc[1] = (tas) 0;
+  t-&gt;suc[2] = (tas) 0;
+  t-&gt;surf   = 0.0;
+  return t;
+}
+tas creetas () {
+  tas t[5];
+  int i;
+  for (i = 0; i &lt; 5; i++) {
+	t[i] = creenoeud (i);
+  }
+  t[0]-&gt;suc[0] = t[4];
+  t[0]-&gt;suc[1] = (tas) 0;
+  t[0]-&gt;suc[2] = t[2];
+  t[1]-&gt;suc[0] = t[0];
+  t[1]-&gt;suc[2] = (tas) 0;
+  t[1]-&gt;suc[1] = t[3];
+  t[2]-&gt;suc[0] = (tas) 0;
+  t[2]-&gt;suc[1] = (tas) 0;
+  t[2]-&gt;suc[2] = t[4];
+  t[3]-&gt;suc[0] = (tas) 0;
+  t[3]-&gt;suc[1] = t[0];
+  t[3]-&gt;suc[2] = t[2];
+  t[4]-&gt;suc[0] = t[2];
+  t[4]-&gt;suc[1] = t[3];
+  t[4]-&gt;suc[2] = t[1];
+  return t[0];
+}
+void goaffichetas (tas t, char boo [MAX]) {
+
+  if (!t)
+	return;
+  if (boo [t-&gt;n])
+	  return;
+  printf(" %d \t %d \t %f \t%f \n", t-&gt;n, t-&gt;h, t-&gt;l, t-&gt;surf);
+  printf(" %d \t %d",  (int) ((long long int) t % 10000), (int) ((long long int) t-&gt;suc[0] % 10000));
+  printf(" %d \t %d  \n", (int) ((long long int) t-&gt;suc[1] % 10000), (int) ((long long int) t-&gt;suc[2] % 10000));
+  boo[t-&gt;n] = 1;
+  goaffichetas(t-&gt;suc[0], boo);
+  goaffichetas(t-&gt;suc[1], boo);
+  goaffichetas(t-&gt;suc[2], boo);
+}
+void affichetas (tas t) {
+  char boo [MAX];
+  int i;
+  for (i = 0; i &lt; MAX; i++)
+	boo[i] = 0;
+  goaffichetas (t, boo);
+}
+float absf (float x) {
+  if (x &lt; 0.0)
+	return - x;
+  return x;
+}
+void remplirsurf (tas t) {
+  if (! t)
+	return;
+  if (t-&gt;surf != 0.0)
+	return;
+  t-&gt;surf = t-&gt;h * t-&gt;l;
+  remplirsurf (t-&gt;suc[0]);
+  remplirsurf (t-&gt;suc[1]);
+  remplirsurf (t-&gt;suc[2]);
+}
+
+
+int main () {
+  tas t;
+  t = creetas ();
+  affichetas(t);
+  printf("\n\n");
+  remplirsurf(t);
+  affichetas(t);
+}
+</stdlib.h></stdio.h></pre></td></tr></tbody></table>
+Que se passe-t-il si on transcrit directement la fonction remplirsurf
+pour chercher un élément dans le graphe, après que replirsurf ait été
+lancée&nbsp;?
+
+  </li><li>Différentes structures
+<ol>
+<li>Tableau complet<br>
+On voit ici une façon de créer un graphe avec un tableau plutôt vide,
+  surtout quand le graphe est "grand".
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+typedef short unsigned Shu;
+struct graphe {
+  int nbs;
+  Shu * tab;
+} ;
+typedef struct graphe graphe;
+graphe creegraphe (int nbs) {
+  Shu i, j, max, num;
+  float v, taux;
+  graphe g;
+  g.nbs = nbs;
+  max = nbs * nbs;
+  taux = 25.0;
+  num = nbs / 10;
+  while (num &gt; 1) {
+	num /= 5;
+	taux /= 3.0;
+  }
+  taux /= 100.0;
+  printf("taux %g\n", taux);
+  g.tab = (Shu *) malloc (max * sizeof(Shu));
+  memset(g.tab, 0, max);
+  srand(time(NULL));
+  for (num = 0, i = 0; i &lt; nbs; i++)
+	for (j = 0; j &lt; nbs; j++) {
+	  v = (float) rand () / RAND_MAX;
+	  g.tab[num++] = v &lt; taux ? 1 : 0;
+	}
+  return g;
+}
+void voirgraf (graphe g) {
+  Shu i, j, nb, num;
+  nb = g.nbs;
+  printf("Graphe\n");
+  for (i = 0, num = 0; i &lt; nb; i++) {
+	for (j = 0; j &lt; nb; j++)
+	  printf("%c ", g.tab[num++]? '1' : ' ');
+	printf("\n");
+  }
+}
+Shu nbnonnuls (graphe g) {
+  Shu i, j, nb, num, total;
+  nb = g.nbs;
+  total = 0;
+  printf("Graphe\n");
+  for (i = 0, num = 0; i &lt; nb; i++) {
+	for (j = 0; j &lt; nb; j++)
+	  total += g.tab[num++];
+  }
+  return total;
+}
+int main () {
+  graphe g;
+  int nb;
+  Shu to;
+  nb = 10;
+  g = creegraphe (nb);
+  voirgraf(g);
+  to = nbnonnuls(g);
+  printf("Pour %d il y a %d cases non vides\n soit %f %% \n", nb, to, (to * 100.0)/(nb * nb));
+  nb = 50;
+  g = creegraphe (nb);
+  to = nbnonnuls(g);
+  printf("Pour %d il y a %d cases non vides\n soit %f %% \n", nb, to, (to * 100.0)/(nb * nb));
+  nb = 500;
+  g = creegraphe (nb);
+  to = nbnonnuls(g);
+  printf("Pour %d il y a %d cases non vides\n soit %f %% \n", nb, to, (to * 100.0)/(nb * nb));
+}
+/*taux 0.25
+Graphe
+  1                 
+  1     1           
+      1   1         
+        1           
+      1     1     1 
+1       1 1 1       
+  1     1       1   
+  1                 
+  1     1   1   1   
+    1 1         1 1 
+Graphe
+Pour 10 il y a 25 cases non vides
+ soit 25.000000 % 
+taux 0.0833333
+Graphe
+Pour 50 il y a 212 cases non vides
+ soit 8.480000 % 
+taux 0.00925926
+Graphe
+Pour 500 il y a 2333 cases non vides
+ soit 0.933200 % 
+*/
+</time.h></stdlib.h></string.h></stdio.h></pre></td></tr></tbody></table>
+Très proche du précédent, mais avec des listes de successeurs.
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>typedef short unsigned Shu;
+struct succsom {
+  Shu y;
+  Shu val;
+  struct succsom * nxt;
+} ;
+typedef struct succsom succsom;
+typedef struct succsom * ligne;
+struct graphe {
+  int nbs;
+  ligne * tab;
+} ;
+typedef struct graphe graphe;
+</pre></td></tr></tbody></table>
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>graphe creegraphe (int nbs) {
+  Shu i, j, flag, num;
+  float v, taux;
+  graphe g;
+  ligne l, ptl;
+  g.nbs = nbs;
+  taux = 25.0;
+  num = nbs / 10;
+  while (num &gt; 1) {
+	num /= 5;
+	taux /= 3.0;
+  }
+  taux /= 100.0;
+  printf("taux %g\n", taux);
+  g.tab = (ligne *) malloc (nbs * sizeof(ligne));
+  memset(g.tab, 0, (size_t) nbs * 8);
+  srand(time(NULL));
+  for (i = 0; i &lt; nbs; i++) {
+	for (j = 0; j &lt; nbs; j++) {
+	  v = (float) rand () / RAND_MAX;
+	  flag =  v &lt; taux ? (int) (v * 1000) : 0;
+	  if (flag) {
+		ptl = (ligne) malloc (sizeof(succsom));
+		ptl-&gt;y = j;
+		ptl-&gt;val = flag;
+		ptl-&gt;nxt = g.tab[i];
+		g.tab[i] = ptl;
+	  }
+	}
+  }
+  return g;
+}
+</pre></td></tr></tbody></table>
+et maintenant les deux fonctions qui répondent s'il y a un chemin.
+<table align="CENTER" border="1">
+<tbody><tr><td><pre>int chemin (Shu dep, Shu arr, graphe g, Shu flag[]) {
+  Shu new;
+  ligne l;
+  if (dep == arr)
+	return 1;
+  if (flag[dep])
+	return 0;
+  l = g.tab[dep];
+  flag[dep] = 1;
+  while (l) {
+	new = l-&gt;y;
+	if (! flag[new])
+	  if (chemin(new, arr, g, flag))
+		return 1;
+	l = l-&gt;nxt;
+  }
+  return 0;
+}
+int existe_chemin (Shu dep, Shu arr, graphe g) {
+  Shu * flag;
+  flag = (Shu *) malloc (g.nbs * sizeof(Shu));
+  memset(flag, 0, (size_t) (g.nbs &lt;&lt; 1));
+  return chemin (dep, arr, g, flag);
+}
+</pre></td></tr></tbody></table>
+
+
+</li></ol>
+  </li><li>Recherche du plus court chemin
+  </li><li>Composantes connexes
+  </li><li>Arbre recouvrant
+</li></ol>
+<p>
+
+</p></li><li><a name="Compression">Compression</a><p>
+
+<!---
+<HR SIZE=3 NOSHADE WIDTH="100%">
+<P>
+
+<LI><A NAME="projets">Projets</A><P>
+
+<B><A HREF="#presen">Présentation</A></B><P>
+Le 22 mai 2013 à 12h (Heures de Paris) vous devrez rendre la version complète de votre
+projet. <P><BR>Il faut fournir une version papier et une version électronique
+<P><FONT COLOR=RED>Présentation de vos travaux</P>
+</FONT>
+<P>Les présentations sont prévues le lundi 27 mai 2012 entre 12h et
+  15h, en salle A148.</P> (NB Le 20 mai, jour
+  férié ne peut pas être conservé, voilà pourquoi ces décalages ont eu lieu).<P>
+Vous pourrez présenter votre travail en vous aidant de vidéo projection.
+</B></P>
+
+<!---<FONT color=red>
+Pour les projets en retard, une session de rattrapage est prévue et il
+faudra rendre vos travaux le 1er septembre à midi (heure de Paris)
+dernier délai.<P></P><BR> </FONT>
+--->
+<!---
+<B><A HREF="#images">Projets</A></B>
+  <OL>
+  <LI>Droites&nbsp;<BR>
+    Essayer tous les algorithmes présentés en cours et tester
+	leur efficacité (vitesse, validité). Trouver, si possible, un
+	algorithme plus rapide.<P>
+  <LI>Droites, Berstel, Castel<BR>
+    Faites <UL>
+    <LI> 1) tourner les algorithmes de Jean Berstel et Castel donnés en cours.
+	<LI> 2) idem en codant le mot de trace sous la forme d'une série de bits.
+	<LI> 3) coder le mot "le plus juste" grâce aux systèmes de décalages.
+    <LI> 4) modifier le programme en utilisant les décalages (shift) à
+	 droite ou à gauche.
+    <LI> 5) étudier l'efficacité de la méthode.<P>
+    </UL>
+<!--  <LI>Droites, Castel<BR>
+    À partir le l'algorithme de Castle et Pitteway (basé sur
+	l'algorithme d'Euclide), et en codant le mot de trace sous la
+	forme d'une série de bits, faites <UL>
+    <LI> 1) tourner l'algorithme donné en cours.
+	<LI> 2) coder le mot "le plus juste" grâce aux systèmes de décalages.
+    <LI> 3) modifier le programme en utilisant les décalages (shift) à
+	 droite ou à gauche de façon à obtenir un programme très rapide.
+    </UL>---></p><p>
+<!---
+  <LI>Courbes<BR>
+    Écrire un méta-programme qui, à partir de la méthode dda et de sa
+	généralisation par Jordan, donne directement la
+	fonction&nbsp;<B>C</B> optimisée à partir de la formule d'une courbe.<P>
+  <LI>Coloriage <BR>
+    Programmez différentes de méthodes de coloriage d'une tache
+	(Smith, Fishkin et Barsky, Hégron...).<P>
+  <LI>Coloriage fin<BR>
+    Programmez une méthode de coloriage d'une tache à l'aide de
+	couleurs non unies. Par exemple remplir par des hachures, ou des
+	traits ou des mini-taches.<P>
+  <LI>Coloriage avec dégradé &nbsp;<BR>
+    Soit une tache de l'écran, il s'agit de la remplir par une couleur
+	non uniforme, la couleur peut, par exemple, varier en fonction de
+	la distance à un certain point de l'image. L'Analyse
+	différentielle discrète pourra être appliquée avec succès.<P>
+  <LI>Manipulations pixelaires<BR>
+    Faire tourner les exemples donnés en cours pour transformer des
+	images avec des effets artistiques. En particulier les effets de
+    dithering et de petits traits avec gestion d'erreur.<BR>
+    On pourra aussi remplacer les petits traits par de mini-taches de
+    façon à donner un effet.<P>On peut utiliser ce travail pour
+    l'intégrer dans un projet plus vaste et afficher les images ainsi
+    produites comme des tableaux dans une exposition.
+  <LI>Flou <BR>
+	On traite une image par carrés disjoints, de taille, par exemple,
+	3x3 ou 4x4. Pour chacun des carrés
+    interchanger "aléatoirement" un certain nombre de pixels. Tester
+    différentes formes d'"aléatoire" et différentes proportions de
+    pixels interchangés.<P>
+    Trouver ensuite des arrangements plus esthétiques.
+  <LI>Zooms avants et arrières&nbsp;<BR>
+    Mettre en place quelques zooms simples sur une image&nbsp;:<OL>
+    <LI>agrandissement par simple interpolation linéaire,
+    <LI>agrandissement par interpolation quadratique (à la Bezier),
+    <LI>réduction par moyenne de 2, 4, 9 pixels,
+    <LI>réduction par paquets, par exemple à partir de 36 pixels on en
+    construit 10, avec des valeurs judicieusement choisies.
+    </OL><P>
+  <LI>Recoloriage<BR>
+     Il s'agit ici de recolorier une image par des systèmes de
+     mini-lignes&nbsp;: traiter chaque unité de surface et afficher, à
+     sa place, un segment de la couleur adéquate. Les segments
+     peuvent être de différentes formes, inclinaisons, longueurs.<P>
+  <LI>Peinture&nbsp;<BR>
+     Modifier les algorithmes de rendus de façon à donner un effet
+     peinture à une image donnée ou calculée.<BR> Il faudra donc
+     reprendre l'image, la colorier par des "traits" dont chacun sera
+     un "coup de pinceau" simulé.<P>
+
+<LI>Contours: Les splines Catmull-Rom<BR>
+Ces splines passent exactement par les points de contrôles donnés en
+paramètre.
+Après avoir obtenus des contours dans une image, nous cherchons à donner
+un effet coups de crayon à nos contours.
+Pour cela, nous proposons de crééer des contours qui suivent à peu près la
+formes des premiers contours trouvés.<BR>
+Il s'agit donc de trouver les points de controle (changement de direction)
+dans la premiere courbe et une fois ces point trouvés, d'appliquer une
+Catmull-Rom dessus.<BR>
+Difficulté : nous voulons conserver les angles droits et conserver les
+lignes droites. Autrement dit, un angle droit ne doit pas devenir une
+courbe. Nous ne voulons pas non plus qu'une courbe relativement plate
+devienne une droite.<P>
+
+<LI>Contours: anti-aliasing&nbsp;<BR>
+Soit une image couleur IC, vous commencerez par fabriquer une image en
+  noveaux de gris IG. <BR>
+Vous implémenterez différentes méthodes  d'anti-aliasing (anti-crénelage
+ou effet marche d'escalier) sur IG.
+Ensuite, vous trouverez le moyen de
+mettre dans une seule et même image l'image des contours et l'image en
+couleur.<BR>
+Difficulté: après avoir lissé vos contours, votre image ne sera plus en
+noir et blanc, vous aurez également des niveaux de gris. Lorsque nous
+introduisons l'image en couleur dans l'image des contours, nous ne voulons
+pas obtenir d'effet de bord blanc sur nos contours.<P>
+
+<LI>Contours: effets<BR>
+Vous implémenterez différents effet de pinceau, crayon, etc. et vous
+  en servirez pour recolorier l'ensemble des contours d'une
+  région. Vous devez alors rendre un effet, par exemple crayonné, à
+  une image.
+<BR>
+<P>
+
+<LI>Carte de régions&nbsp;<BR>
+Vous implémenterez un algorithme permetant de segmenter une image en
+différentes régions.<P>
+
+<LI>Ombre et lumière<BR>
+Soit deux images: la photo originale et la carte de ses ombres et lumières
+représentées par un seuillage binaire noir et blanc, qu'il faudra programmer.
+<BR>
+Implémenter différents effets stylistiques pour l'ombre et la lumière:<BR>
+1) A-plats noir pour l'ombre conservation des couleurs dans la lumière +
+un type de contour (vu en cours).<BR>
+2) Effet pastel dans la lumière et couleurs vives sombres dans l'ombre
+(voir Monet)<BR>
+3) Trouver un autre style existant d'effet ombre/lumière et l'implémenter.<BR>
+
+
+<LI>From 2D to 3D&nbsp;<P>
+Extracting a simplified 3D-model from a 2D-image and repainting the
+identified contours, perhaps from different points of view. 
+To achive this one has to:
+<UL>
+<LI> extract the contours by a filter
+<LI> interpolite straight lines and continuous lines
+<LI> identify "parallel" lines (which are conical in the image) and
+ right angles (at the beginning: assumption that all angles are right
+ angles) 
+<LI> calculate the depth of the corners
+<LI> change the point of view and recalculate the position of the corners)
+<LI>repaint the lines
+<LI>If possible,
+stretch the areas which are outlined by
+  the contours and repaint them to change the point of view of the
+  original image. 
+</UL>
+
+<LI> ASCII-Art&nbsp;<P>
+Produire un effet d'ASCII-art comme celui d'Ostromoukhov dans son
+article sur les screenings. (article disponible sur demande)
+
+<LI> Compression d'images<P>
+Mettre en place différents algorithmes de compression d'images, en
+particulier en tenant compte des couleurs et du nombre de couleurs à utiliser.
+  </OL><P>
+
+<LI>Real-Time Halftoning<BR>
+Read and present the paper to your comrades.
+</OL>
+--->
+</p><hr size="3" noshade="noshade" width="100%">
+
+<p>Dernière mise à jour : 21/10/2015</p>
+</li></ol></font></body></html>

@@ -1,0 +1,40 @@
+	.file	""
+	.text
+	.globl	pgcd
+	.type	pgcd, @function
+pgcd:
+.LFB0:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	movl	%edi, -20(%rbp)
+	movl	%esi, -24(%rbp)
+	jmp	.L2
+.L4:
+	movl	-20(%rbp), %eax
+	cmpl	-24(%rbp), %eax
+	jge	.L3
+	movl	-24(%rbp), %eax
+	movl	%eax, -4(%rbp)
+	movl	-20(%rbp), %eax
+	movl	%eax, -24(%rbp)
+	movl	-4(%rbp), %eax
+	movl	%eax, -20(%rbp)
+.L3:
+	movl	-24(%rbp), %eax
+	subl	%eax, -20(%rbp)
+.L2:
+	cmpl	$0, -20(%rbp)
+	jne	.L4
+	movl	-24(%rbp), %eax
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	pgcd, .-pgcd
+	.ident	"GCC: (Ubuntu 4.9.2-10ubuntu13) 4.9.2"
+	.section	.note.GNU-stack,"",@progbits

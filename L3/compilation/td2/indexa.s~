@@ -1,0 +1,14 @@
+	.globl indexa
+	.text
+indexa:
+	movl 4(%esp),%eax
+	decl %eax
+
+loop:	incl %eax
+	cmpb 'a',%eax
+	
+
+	
+	
+	
+	

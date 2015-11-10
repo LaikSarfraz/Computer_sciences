@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{url}
+\usepackage[T1]{fontenc}        % pour « »
+\usepackage[utf8]{inputenc}     % entrée en utf-8
+\usepackage[dvips,dvipdf]{graphicx}
+\usepackage{color}
+\usepackage[french]{babel}
+\usepackage{a4}
+
+\setlength{\parindent}{0cm}
+
+\newcommand{\xxx}{\vspace*}
+
+\newcounter{questionnumero}
+\stepcounter{questionnumero}
+\newcommand{\Question}{{\bf Question \arabic{questionnumero}~:~}\stepcounter{questionnumero}}
+
+\title{ TD numéro 3}
+\date{25 octobre 2015}
+\author{Sarfraz Laïk}
+
+\begin{document}
+\maketitle
+Réponse au TD
+
+\begin{itemize}
+\item[1] 1/Pushq remplace pushl. De plus c'est le registre rbp qui pointe sur le sommet de la pile.
+\item[2] 2/Les valeurs sont toujours renvoyées avec le registre eax
+\item[3] 3/ Une fonction renvoie un pointeur en mettant la variable globale dans le registre eax
+\item[4] 4/Si une fonction n'a pas d'arguments, après un call, il ya l'instruction nop qui suit.
+\item[5] 5/ les 6 premiers arguments vont dans les registres edi , esi , edx , ecx , r8d puis r9d . ensuite dans la pile avec pushq. Cette réponse était dans le pdf.
+\item[6] 6/ Pour 6 boucles, ce sont les registres de r15 à rbx qui sont disponibles pour stocker des variables entieres. Il y a 6 registres disponibles.
+\item[7] 7/ Le fichier se trouve dans le dossier suivant /usr/lib/gcc/x86_64-linux-gnu/4.9/include/stdarg.h . 
+\end{itemize}
+
+
+\end{document}

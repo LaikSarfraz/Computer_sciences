@@ -1,0 +1,36 @@
+<uses-permission android:name "android.permission.WRITE_EXTERNAL_STORAGE"/>
+Sauvegarder des données
+
+-getsharedpreferences () on l(utilise si on veut plusieurs fichiers . exemple
+un fichier par niveau
+-getPreferences () = Si on a besoin d'un seul fichier, pas besoin de sembeter
+
+Context context = getActivity();
+SharedPreferences sharedPref=context.getSharedPreference(context.getRessources.getString(R.string.preference_file_Rep),Context.Mode_Private)
+
+On écrit le nom du package 
+faut mettre le nom du package devant le nom de notre fichier de reference = PAR CONVENTION, pr éviter les conflits avec dautres applis
+fr.realisations_app.myApp.Settings
+
+en privé = aucune application ne peut accéder à nos données.
+Exemple = ca sert si pr exemple si le user a déjà lu les preferences, on lajoute.
+SharedPreferences.Editor editor=sharedPref.edit();
+editor.pertInt("high_score",newHighScore);
+editor.commit();
+int defaultValue=0;
+
+Exemple des jeux avec tuto , mettre un flag aVuLeTuto , valeur par défaut = false
+Le mettre ensuite a true
+
+On n'a pas besoin de permission mais dans android 6 qui sort le mois prochain ca va etre necessaire
+
+
+<manifest ...>
+
+<uses-permission android:name "android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name "android.permission.READ_EXTERNAL_STORAGE"/>
+
+</manifest>
+
+
+
